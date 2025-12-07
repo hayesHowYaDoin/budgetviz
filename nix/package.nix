@@ -73,7 +73,7 @@
 
           # Set environment for production
           export NODE_ENV=production
-          export PORT=''${PORT:-3000}
+          export PORT=''${PORT:-5173}
           export FRONTEND_DIR=${placeholder "out"}/lib/budgetviz/frontend
 
           echo "Starting Budget Visualizer..."

@@ -39,22 +39,22 @@ budgetviz/
 
 ## Installation
 
-This project uses Nix for development environment management. Make sure you have Nix with flakes enabled.
+This project uses Nix for elopment environment management. Make sure you have Nix with flakes enabled.
 
 ### Quick Start with Just
 
 ```bash
-# Enter the Nix development shell
-nix develop
+# Enter the Nix elopment shell
+nix elop
 
 # Install all dependencies
 just install
 
 # Start both backend and frontend with process-compose (single terminal)
-just dev
+just pc 
 ```
 
-The `just dev` command uses process-compose to run both services in a single terminal with:
+The `just pc` command uses process-compose to run both services in a single terminal with:
 - Automatic restart on failure
 - Health checks for both services
 - Integrated log viewing
@@ -66,12 +66,12 @@ If you prefer to install manually:
 
 **Backend:**
 ```bash
-nix develop --command bash -c "cd backend && npm install"
+nix elop --command bash -c "cd backend && npm install"
 ```
 
 **Frontend:**
 ```bash
-nix develop --command bash -c "cd frontend && npm install"
+nix elop --command bash -c "cd frontend && npm install"
 ```
 
 ## Running the Application
@@ -79,7 +79,7 @@ nix develop --command bash -c "cd frontend && npm install"
 ### Recommended: Use Process-Compose (Single Terminal)
 
 ```bash
-just dev
+just 
 # or
 process-compose
 ```
@@ -101,14 +101,14 @@ The backend runs on `http://localhost:3000` and frontend on `http://localhost:51
 ```bash
 just backend
 # or
-nix develop --command bash -c "cd backend && npm run dev"
+nix elop --command bash -c "cd backend && npm run pc"
 ```
 
 **Frontend:**
 ```bash
 just frontend
 # or
-nix develop --command bash -c "cd frontend && npm run dev"
+nix elop --command bash -c "cd frontend && npm run pc"
 ```
 
 ## Usage
@@ -146,11 +146,11 @@ date,amount,description
 This project includes a `justfile` for common tasks:
 
 - `just install` - Install all dependencies (both backend and frontend)
-- `just dev` - Start both backend and frontend with process-compose (recommended)
+- `just ` - Start both backend and frontend with process-compose (recommended)
 - `just pc` - Alias for process-compose
-- `just backend` - Start backend development server only
-- `just frontend` - Start frontend development server only
-- `just dev-manual` - Show instructions for manual startup
+- `just backend` - Start backend elopment server only
+- `just frontend` - Start frontend elopment server only
+- `just -manual` - Show instructions for manual startup
 - `just build` - Build both backend and frontend for production
 - `just clean` - Remove all build artifacts and node_modules
 - `just clean-build` - Remove only build artifacts (keep dependencies)
@@ -170,13 +170,13 @@ just build
 
 **Backend:**
 ```bash
-nix develop --command bash -c "cd backend && npm run build"
-nix develop --command bash -c "cd backend && npm start"
+nix elop --command bash -c "cd backend && npm run build"
+nix elop --command bash -c "cd backend && npm start"
 ```
 
 **Frontend:**
 ```bash
-nix develop --command bash -c "cd frontend && npm run build"
+nix elop --command bash -c "cd frontend && npm run build"
 ```
 
 The built files will be in `frontend/dist/` and can be served with any static file server.
