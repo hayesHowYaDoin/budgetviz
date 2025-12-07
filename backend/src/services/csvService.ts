@@ -4,7 +4,7 @@ import { parse } from 'csv-parse/sync';
 import { stringify } from 'csv-stringify/sync';
 import { Budget, Purchase } from '../models/budget';
 
-const DATA_DIR = path.join(__dirname, '../../data');
+const DATA_DIR = process.env.BUDGETVIZ_DATA_DIR || path.join(__dirname, '../../data');
 
 /**
  * Ensure data directory exists
