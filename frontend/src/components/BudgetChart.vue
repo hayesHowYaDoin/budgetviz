@@ -1,7 +1,7 @@
 <template>
   <div class="section">
     <h2>Budget Over Time</h2>
-    <div class="chart-container" v-if="chartData.labels.length > 0">
+    <div class="chart-container" v-if="chartData.datasets.length > 0">
       <Line :data="chartData" :options="chartOptions" />
     </div>
     <p v-else style="color: #6c757d; font-style: italic;">
@@ -15,7 +15,7 @@ import { computed } from 'vue';
 import { Line } from 'vue-chartjs';
 import {
   Chart as ChartJS,
-  CategoryScale,
+  TimeScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -25,11 +25,12 @@ import {
   Filler,
   type ChartOptions
 } from 'chart.js';
+import 'chartjs-adapter-date-fns';
 import type { BudgetDataPoint } from '../types';
 
 // Register Chart.js components
 ChartJS.register(
-  CategoryScale,
+  TimeScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -46,24 +47,17 @@ const props = defineProps<{
 const chartData = computed(() => {
   if (!props.balanceData || props.balanceData.length === 0) {
     return {
-      labels: [],
       datasets: []
     };
   }
 
-  const labels = props.balanceData.map(point => {
-    const date = new Date(point.date + 'T00:00:00');
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-  });
-
-  const data = props.balanceData.map(point => point.balance);
+  // Convert data points to {x, y} format for time scale
+  const data = props.balanceData.map(point => ({
+    x: new Date(point.date + 'T00:00:00'),
+    y: point.balance
+  }));
 
   return {
-    labels,
     datasets: [
       {
         label: 'Budget Balance',
@@ -114,6 +108,14 @@ const chartOptions: ChartOptions<'line'> = {
       }
     },
     x: {
+      type: 'time',
+      time: {
+        unit: 'month',
+        displayFormats: {
+          month: 'MMM yyyy'
+        },
+        tooltipFormat: 'MMM d, yyyy'
+      },
       ticks: {
         maxRotation: 45,
         minRotation: 45

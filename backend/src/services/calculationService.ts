@@ -55,27 +55,21 @@ export function calculateBalanceOverTime(budget: Budget): BudgetDataPoint[] {
   let balance = budget.initialValue;
   let currentDate = new Date(startDate);
   let purchaseIndex = 0;
-
-  // Add initial data point
-  dataPoints.push({
-    date: currentDate.toISOString().split('T')[0],
-    balance: balance
-  });
+  let lastDateStr = '';
 
   // Process day by day
   while (currentDate <= endDate) {
-    // Check for purchases on this day
+    const currentDateStr = currentDate.toISOString().split('T')[0];
+    let balanceChanged = false;
+
+    // Process ALL purchases on this day
     while (purchaseIndex < sortedPurchases.length) {
       const purchaseDate = new Date(sortedPurchases[purchaseIndex].date);
-      const currentDateStr = currentDate.toISOString().split('T')[0];
       const purchaseDateStr = purchaseDate.toISOString().split('T')[0];
 
       if (purchaseDateStr === currentDateStr) {
         balance -= sortedPurchases[purchaseIndex].amount;
-        dataPoints.push({
-          date: currentDateStr,
-          balance: balance
-        });
+        balanceChanged = true;
         purchaseIndex++;
       } else if (purchaseDate > currentDate) {
         break;
@@ -91,10 +85,16 @@ export function calculateBalanceOverTime(budget: Budget): BudgetDataPoint[] {
     if (nextDay.getMonth() !== currentDate.getMonth()) {
       // End of month - add contribution
       balance += budget.monthlyContribution;
+      balanceChanged = true;
+    }
+
+    // Only add a data point if balance changed OR it's the first day
+    if (balanceChanged || currentDateStr !== lastDateStr && lastDateStr === '') {
       dataPoints.push({
-        date: currentDate.toISOString().split('T')[0],
+        date: currentDateStr,
         balance: balance
       });
+      lastDateStr = currentDateStr;
     }
 
     currentDate = nextDay;
