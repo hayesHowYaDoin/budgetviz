@@ -39,3 +39,7 @@ tmp/
 
 # OS files
 Thumbs.db
+
+# Nix generated files
+.direnv/
+.pre-commit-config.yaml

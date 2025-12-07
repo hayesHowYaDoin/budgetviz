@@ -14,7 +14,10 @@ function getEndOfMonth(year: number, month: number): Date {
 export function calculateBalanceOverTime(budget: Budget): BudgetDataPoint[] {
   const dataPoints: BudgetDataPoint[] = [];
 
-  if (budget.purchases.length === 0) {
+  // Filter to only include enabled purchases
+  const enabledPurchases = budget.purchases.filter(p => p.enabled);
+
+  if (enabledPurchases.length === 0) {
     // If no purchases, just show initial value and a few months of contributions
     const today = new Date();
     let balance = budget.initialValue;
@@ -36,8 +39,8 @@ export function calculateBalanceOverTime(budget: Budget): BudgetDataPoint[] {
     return dataPoints;
   }
 
-  // Sort purchases by date
-  const sortedPurchases = [...budget.purchases].sort((a, b) =>
+  // Sort enabled purchases by date
+  const sortedPurchases = [...enabledPurchases].sort((a, b) =>
     new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
@@ -107,7 +110,10 @@ export function calculateBalanceOverTime(budget: Budget): BudgetDataPoint[] {
  * Calculate suggested monthly contribution to reach zero balance after all purchases
  */
 export function calculateSuggestedContribution(budget: Budget): SuggestedContribution {
-  if (budget.purchases.length === 0) {
+  // Filter to only include enabled purchases
+  const enabledPurchases = budget.purchases.filter(p => p.enabled);
+
+  if (enabledPurchases.length === 0) {
     return {
       monthlyAmount: 0,
       totalMonths: 0,
@@ -115,8 +121,8 @@ export function calculateSuggestedContribution(budget: Budget): SuggestedContrib
     };
   }
 
-  // Sort purchases by date
-  const sortedPurchases = [...budget.purchases].sort((a, b) =>
+  // Sort enabled purchases by date
+  const sortedPurchases = [...enabledPurchases].sort((a, b) =>
     new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 

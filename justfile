@@ -25,10 +25,6 @@ frontend:
     cd frontend && npm run dev
 
 # Start both backend and frontend with process-compose (single terminal)
-dev:
-    process-compose
-
-# Alias for process-compose
 pc:
     process-compose
 

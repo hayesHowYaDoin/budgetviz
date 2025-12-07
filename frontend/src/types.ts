@@ -2,6 +2,7 @@ export interface Purchase {
   date: string;
   amount: number;
   description: string;
+  enabled: boolean;
 }
 
 export interface Budget {

@@ -44,11 +44,16 @@ export async function saveBudget(budget: Budget): Promise<void> {
   rows.push([]);
 
   // Purchase header
-  rows.push(['date', 'amount', 'description']);
+  rows.push(['date', 'amount', 'description', 'enabled']);
 
   // Purchase data
   for (const purchase of budget.purchases) {
-    rows.push([purchase.date, purchase.amount.toString(), purchase.description]);
+    rows.push([
+      purchase.date,
+      purchase.amount.toString(),
+      purchase.description,
+      purchase.enabled.toString()
+    ]);
   }
 
   const csvContent = stringify(rows);
@@ -66,7 +71,8 @@ export async function loadBudget(budgetName: string): Promise<Budget> {
   try {
     const content = await fs.readFile(filePath, 'utf-8');
     const rows = parse(content, {
-      skip_empty_lines: true
+      skip_empty_lines: true,
+      relax_column_count: true  // Allow rows with different column counts
     }) as string[][];
 
     if (rows.length < 2) {
@@ -97,7 +103,9 @@ export async function loadBudget(budgetName: string): Promise<Budget> {
           purchases.push({
             date: row[0],
             amount: parseFloat(row[1]),
-            description: row[2] || ''
+            description: row[2] || '',
+            // Backward compatibility: default to true if enabled field not present
+            enabled: row[3] !== undefined ? row[3] === 'true' : true
           });
         }
       }

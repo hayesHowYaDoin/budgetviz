@@ -2,6 +2,7 @@ export interface Purchase {
   date: string; // ISO date format (YYYY-MM-DD)
   amount: number;
   description: string;
+  enabled: boolean; // Whether this purchase is included in calculations
 }
 
 export interface Budget {
